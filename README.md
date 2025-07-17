@@ -1,16 +1,43 @@
-# flutter_application_1
+# Team Projact - ShoppingMall 
 
-A new Flutter project.
+### 상품 목록 페이지 (item_list.dart)
+- 상단 앱바 타이틀
+- 상품목록은 카드 형식으로 되어 있음
+- 상품 이미지, 상품 이름, 상품가격
+  - (예외) 상품이 없으면 '상품이 없습니다' 출력
+  - 가격이 세 자리 수 이상일 경우 세 자리마다 콤마(,) 찍기
+  - 가격이 0 일 경우 “무료” 등 표현하기
 
-## Getting Started
+### 상품 상세 페이지 (item_detail.dart)
+- 앱바 타이틀
+- 이미지
+- 상품명 
+- 상품 설명
+- 상품 개수
+- 구매하기버튼
+- 연상되는 금액 출력
+  - (예외) 구매하기 버튼을 누를 때 개수가  1 이상인지 체크하는 로직
 
-This project is a starting point for a Flutter application.
+### 상품 등록 페이지 (item_register.dart)
+- 앱바 타이틀
+- 이미지
+- 상품명
+- 상품 가격
+- 상품 설명
+- 등록하기 버튼
 
-A few resources to get you started if this is your first Flutter project:
+# Divice: iphone 16 pro
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+ 도전 기능
+  - 장바구니
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
+ |   |   |   |
+ |---|---|---|
+ |   |   |   |
+
+
+  
+ 
