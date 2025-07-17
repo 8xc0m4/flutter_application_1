@@ -26,7 +26,8 @@
 - 상품 설명
 - 등록하기 버튼
 
-# Divice: iphone 16 pro
+# Divice: 
+iphone 16 pro max
 
  도전 기능
   - 장바구니
