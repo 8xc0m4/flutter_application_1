@@ -57,8 +57,22 @@ iphone 16 pro max
 | └── /item_images
 ```
 
+Dart 코딩 컨벤션
+
+1. 파일명 : snake_case
+- 소문자 + 언더스코어 사용
+- 예: item_list.dart
+
+2. 클래스명/위젯명
+- 파스칼케이스 (PascalCase) 사용
+- 예: class ItemList {}
+
+3. 함수명 / 변수명
+- 카멜 케이스 (camelCase) 사용
+- 예: int itemCount = 0;
 
 
+>
 Type 설명 참고사항
 
 ---
