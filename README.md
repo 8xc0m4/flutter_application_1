@@ -45,7 +45,7 @@ iphone 16 pro max
 |  김영민   |   상품 등록 페이지 만들기   |     |
 |  공통   |  SA 작성 , 스크럼 일지 정리, QnA 정리 등.. + 시연 영상, 발표 자료, ReadMe   |     |
 
-```
+```dart
 /lib
 ├── main.dart  
 ├── item_list.dart  
@@ -53,6 +53,6 @@ iphone 16 pro max
 ├── item_register.dart  
 ├── /assets
 │ └── /item_description
-| └── descriptions.dart
+|    └── descriptions.dart
 | └── /item_images
 ```
