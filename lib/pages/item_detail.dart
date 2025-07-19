@@ -1,7 +1,7 @@
-import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/item.dart';
+import 'package:provider/provider.dart';
 
 class ItemDetail extends StatefulWidget {
   final Item item;
@@ -9,269 +9,301 @@ class ItemDetail extends StatefulWidget {
   const ItemDetail({super.key, required this.item});
 
   @override
-  _ItemDetailState createState() => _ItemDetailState();
+  State<ItemDetail> createState() => _ItemDetailState();
 }
 
 class _ItemDetailState extends State<ItemDetail> {
-  int _quantity = 1; // 초기 수량 설정
+  int quantity = 1;
+  final Color mainColor = const Color(0xFF95C5D4);
 
   @override
   Widget build(BuildContext context) {
-    // MediaQuery를 사용하여 화면 크기 가져오기
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    //Theme에서 색상 가져오기
-    final lightSkyBlue = Theme.of(context).colorScheme.primary;
-    final skyBlue = Theme.of(context).colorScheme.secondary;
-    final blue = Theme.of(context).colorScheme.tertiary;
-
-    final black3 = Theme.of(context).colorScheme.onSurface;
-    final white = Theme.of(context).colorScheme.surface;
-
-    // functions
-    final totalPrice = widget.item.price * _quantity; // 총 가격 계산
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: lightSkyBlue,
+      backgroundColor: const Color(0xFFE6ECF2), //seed color
       appBar: AppBar(
         title: Text(
           '상품 상세',
-          style: TextStyle(color: blue),
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: mainColor),
         ),
-
-        elevation: 0, // 평면으로 보이게 그림자 제거!
+        backgroundColor: Colors.white,
+        elevation: 0, // 그림자 없이!
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          // === body 1: import image ===
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: screenHeight * 0.01,
+          ),
+          // 이미지 !!
           Container(
-            height: screenHeight * 0.4, // 화면 높이의 40% 사용
-            width: screenWidth, // 화면 너비 전체 사용
-            padding: const EdgeInsets.all(8.0), // 이미지 주변에 패딩 추가
-            color: white,
-            // 이미지 표시
-            child: Image.file(
-              File(widget.item.imagePath),
-              fit: BoxFit.cover,
-              // 이미지 로딩 실패 시 아이콘 표시
-              errorBuilder: (context, error, stackTrace) {
-                return const Center(
-                  child: Icon(
-                    Icons.broken_image,
-                    size: 100,
-                    color: Colors.grey,
-                  ),
-                );
-              },
+            color: mainColor,
+            width: double.infinity,
+            height: screenHeight * 0.3,
+            alignment: Alignment.center,
+            child: Image.asset(
+              widget.item.imagePath,
+              height: screenHeight * 0.2,
+              fit: BoxFit.fill,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.image_not_supported),
             ),
           ),
-          // === body 2: 상품 이름, 가격, 설명 ===
-          Padding(
-            padding: EdgeInsets.all(screenWidth * 0.05), // 화면 너비의 5% 패딩
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween, // 이름과 가격을 양쪽 끝에 배치
-                  children: <Widget>[
-                    Expanded(
-                        child: Text(
-                      widget.item.name,
-                      style: TextStyle(
-                        fontSize: screenWidth * 0.06, // 화면 너비의 6% 크기
-                        fontWeight: FontWeight.bold,
-                        color: black3,
-                      ),
-                    )),
-                    Text(
-                      '${widget.item.price.toString()}원',
-                      style: TextStyle(
-                        fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
-                        fontWeight: FontWeight.bold,
-                        color: blue,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.02), // 화면 높이의 2% 간격
-                Text(
-                  '상품 정보',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
-                    fontWeight: FontWeight.bold,
-                    color: black3,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.02), // 화면 높이의 2% 간격
-                Container(
-                  padding: EdgeInsets.all(screenWidth * 0.03), // 화면 너비의 3% 패딩
-                  decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    widget.item.description,
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.04, // 화면 너비의 4% 크기
-                      height: 1.5,
-                      color: black3,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          const SizedBox(height: 24),
 
-          // === body 3: 수량 조절 및 총 가격, 구매 버튼 ===
-          const Spacer(), // Spacer를 사용하여 아래 버튼을 화면 하단에 위치시킴
-
-          Padding(
-            padding: EdgeInsets.all(screenWidth * 0.05), // 화면 너비의 5% 패딩
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    // Row-1: 수량 선택 텍스트
-                    Text(
-                      '수량 선택',
-                      style: TextStyle(
-                        fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
-                        fontWeight: FontWeight.bold,
-                        color: black3,
+          // 설명 영역
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.item.name,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                    ),
-                    // Row-2: 수량 조절 버튼과 숫자 담는 내부 Row
-                    Row(
-                      children: [
-                        _buildQuantityButton(
-                          Icons.remove,
-                          () {
-                            setState(() {
-                              if (_quantity > 1) _quantity--;
-                            });
-                          },
-                          screenWidth,
-                        ),
-                        SizedBox(width: screenWidth * 0.04), // 화면 너비의 4% 간격
-                        Text(
-                          '$_quantity',
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
-                            fontWeight: FontWeight.bold,
-                            color: black3,
-                          ),
-                        ),
-                        SizedBox(width: screenWidth * 0.04), // 화면 너비의 4% 간격
-                        _buildQuantityButton(
-                          Icons.add,
-                          () {
-                            setState(() {
-                              _quantity++;
-                            });
-                          },
-                          screenWidth,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: screenWidth * 0.3, // 화면 너비의 30% 사용
-                ),
-                // 총 가격 표시하는 Row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // 총 가격 텍스트 (왼쪽 위)
-                    Column(
+                      Text(
+                        '${widget.item.price}원',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '총 가격',
+                        const Text(
+                          '상품 정보',
                           style: TextStyle(
-                            fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: black3,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade300,
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            widget.item.description,
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ),
                       ],
                     ),
-                    // 총 가격 숫자 (오른쪽 아래)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          '${totalPrice.toString()}원',
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
-                            fontWeight: FontWeight.bold,
-                            color: blue,
-                          ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      // 구매 영역
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewPadding.bottom + 8),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.04,
+            vertical: screenHeight * 0.015,
+          ),
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: Colors.grey.shade300)),
+            color: mainColor,
+          ),
+          height: screenHeight * 0.1,
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // 수량 조절
+              Row(
+                children: [
+                  _quantityBox(
+                    onPressed: _decreaseQuantity,
+                    icon: Icons.remove,
+                  ),
+                  SizedBox(width: screenWidth * 0.01),
+                  Text('$quantity', style: const TextStyle(fontSize: 22)),
+                  SizedBox(width: screenWidth * 0.01),
+                  _quantityBox(
+                    onPressed: _increaseQuantity,
+                    icon: Icons.add,
+                  ),
+                ],
+              ),
+              SizedBox(width: screenWidth * 0.01),
+              // 총 가격 텍스트 및 금액 (겹치게 배치)
+              SizedBox(
+                width: screenWidth * 0.3, // 총 가격 영역 너비 조절
+                height: screenHeight * 0.1, // Stack 높이 조절
+                child: Stack(
+                  children: [
+                    // '총 가격' 텍스트 (위쪽)
+                    Positioned(
+                      left: 0,
+                      top: screenHeight * 0.005,
+                      child: Text(
+                        '총 가격',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                      ],
+                      ),
+                    ),
+                    // 가격 텍스트 (조금 아래, 겹쳐지게)
+                    Positioned(
+                      left: screenWidth * 0.1,
+                      top: screenHeight * 0.03, // 이 값을 조정하면 겹침 정도 조절 가능
+                      child: Text(
+                        '${widget.item.price * quantity}원',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.02), // 화면 높이의 2% 간격
-                // --- 구매 버튼 ---
-                SizedBox(
-                  width: double.infinity,
-                  height: screenHeight * 0.065, // 화면 높이의 65% 사용
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // 구매 버튼 클릭 시 동작
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content:
-                              Text('${widget.item.name} $_quantity개 구매 완료!'),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: skyBlue, // 버튼 배경색
-                      foregroundColor: white, // 버튼 텍스트 색상
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10), // 둥근 모서리
-                      ),
-                      elevation: 3, // 그림자 효과
-                    ),
-                    child: Text(
-                      'Buy',
-                      style: TextStyle(
-                        fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
-                        fontWeight: FontWeight.bold,
-                        color: black3, // 버튼 텍스트 색상
-                      ),
-                    ),
+              ),
+
+              // // 가격 표시
+              // Column(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: [
+              //     const Text('총 가격', style: TextStyle(fontSize: 12)),
+              //     Text('${widget.item.price * quantity}원',
+              //         style: const TextStyle(
+              //             fontSize: 16, fontWeight: FontWeight.bold)),
+              //   ],
+              // ),
+              SizedBox(width: screenWidth * 0.01),
+              // 구매 버튼
+              ElevatedButton(
+                onPressed: _showPurchaseDialog,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-              ],
-            ),
+                child: const Text(
+                  'Buy',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 수량 조절 관련 위젯!!!
+  ///
+
+  void _increaseQuantity() {
+    if (quantity < 99) {
+      setState(() {
+        quantity++;
+      });
+    }
+  }
+
+  void _decreaseQuantity() {
+    if (quantity > 1) {
+      setState(() {
+        quantity--;
+      });
+    }
+  }
+
+  void _showPurchaseDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (ctx) => CupertinoAlertDialog(
+        title: const Text('구매 확인'),
+        content: Text('${widget.item.name}을 $quantity개 구매하시겠어요?'),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('취소', style: TextStyle(color: Colors.blueGrey)),
+            onPressed: () => Navigator.pop(ctx),
+          ),
+          CupertinoDialogAction(
+            child: const Text('확인', style: TextStyle(color: Colors.black)),
+            onPressed: () {
+              Navigator.pop(ctx);
+              _showCompleteDialog();
+            },
           ),
         ],
       ),
     );
   }
-}
 
-@override
-// 수량 조절 버튼 위젯 (MediaQuery 적용)
-Widget _buildQuantityButton(
-    IconData icon, VoidCallback onPressed, double screenWidth) {
-  return Container(
-    width: screenWidth * 0.1, // 화면 너비의 10%
-    height: screenWidth * 0.1, // 화면 너비의 10%
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      border: Border.all(color: Colors.grey),
-    ),
-    child: IconButton(
-      icon: Icon(icon, size: screenWidth * 0.05), // 아이콘 크기도 화면 너비에 비례
-      onPressed: onPressed,
-    ),
-  );
+  void _showCompleteDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (ctx) {
+        Future.delayed(const Duration(milliseconds: 1500), () {
+          if (Navigator.canPop(ctx)) {
+            Navigator.pop(ctx);
+          }
+        });
+        return const CupertinoAlertDialog(
+          title: Text('구매 완료'),
+          content: Text('감사합니다!'),
+        );
+      },
+    );
+  }
+
+  Widget _quantityBox(
+      {IconData? icon, VoidCallback? onPressed, Widget? child}) {
+    return Container(
+      width: 36,
+      height: 36,
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Center(
+        child: icon != null
+            ? IconButton(
+                icon: Icon(icon, size: 24, color: mainColor),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                onPressed: onPressed,
+              )
+            : child!,
+      ),
+    );
+  }
 }

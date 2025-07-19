@@ -22,7 +22,7 @@ class ItemProvider extends ChangeNotifier {
       name: '대충 문어',
       description:
           '이 문어는 영국에서 시작되어 행운을 부르는 문어입니다. 이 문어를 구매하고 나서 일주일 내에 지인에게 추천하지 않을 시 문어의 저주가 발생하여 머리가 문어처럼 반짝일 것입니다.',
-      imagePath: 'assets/images/octopus.jpg',
+      imagePath: 'lib/assets/images/octopus.png',
       price: 18000,
     ));
     _items.add(Item(
@@ -30,7 +30,7 @@ class ItemProvider extends ChangeNotifier {
       name: '대충 오징어',
       description:
           '이 오징어는 일본에서 시작되어 행운을 부르는 오징어입니다. 이 오징어를 구매하고 나서 일주일 내에 지인에게 추천하지 않을 시 오징어의 저주가 발생하여 머리가 오징어처럼 반짝일 것입니다.',
-      imagePath: 'assets/images/squid.jpg',
+      imagePath: 'lib/assets/images/squid.png',
       price: 15000,
     ));
   }
