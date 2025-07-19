@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/item_detail.dart';
+// import 'package:flutter_application_1/pages/item_detail.dart';
 import 'package:flutter_application_1/pages/item_register.dart';
 import 'package:flutter_application_1/provider/item_provider.dart';
 import 'package:flutter_application_1/styles/theme.dart';
