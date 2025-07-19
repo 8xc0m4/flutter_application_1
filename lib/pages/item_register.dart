@@ -1,21 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_application_1/models/item.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ItemRegister extends StatefulWidget {
   const ItemRegister({super.key});
-
-  //Function(image, name, price, description) onResister;
 
   @override
   State<ItemRegister> createState() => _ItemRegister();
 }
 
 class _ItemRegister extends State<ItemRegister> {
-  // late String itemName;
-  // late int itemPrice;
-  // late String itemDescription;
+  // 텍스트 필드 컨트롤러
+  var nameController = TextEditingController();
+  var priceController = TextEditingController();
+  var descriptionController = TextEditingController();
 
   File? _image;
 
@@ -31,10 +32,26 @@ class _ItemRegister extends State<ItemRegister> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    nameController.addListener(() {
+      print("dlfma");
+      setState(() {});
+    });
+    priceController.addListener(() {
+      print("dlfma");
+
+      setState(() {});
+    });
+  }
+
   // 빌드 - * 레이아웃 디자인 나오면 맞춰서 수정해야함 *
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: const Text("상품 등록"),
@@ -47,20 +64,28 @@ class _ItemRegister extends State<ItemRegister> {
               children: [
                 selectImage(),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const SizedBox(width: 5),
-                    itemText("상품 이름"),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 21, 10, 10),
+                      child: itemText("상품 이름"),
+                    ),
                     const SizedBox(width: 5),
                     Expanded(child: nameTextField()),
                     const SizedBox(width: 5),
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const SizedBox(width: 5),
-                    itemText("상품 가격"),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 21, 10, 10),
+                      child: itemText("상품 가격"),
+                    ),
                     const SizedBox(width: 5),
                     Expanded(child: priceTextField()),
                     const SizedBox(width: 5),
@@ -68,7 +93,10 @@ class _ItemRegister extends State<ItemRegister> {
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: itemText("상품 설명"),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(17, 21, 10, 10),
+                    child: itemText("상품 설명"),
+                  ),
                 ),
               ],
             ),
@@ -80,23 +108,26 @@ class _ItemRegister extends State<ItemRegister> {
     );
   }
 
+  // 사진 선택
   GestureDetector selectImage() {
     return GestureDetector(
       onTap: _pickImage,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.only(bottom: 10),
         child: Container(
           height: 250,
           width: double.infinity,
           color: Color(0xFF95C5D4),
-          alignment: Alignment.center,
           child: _image == null
-              ? const Text(
-                  "사진 선택",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+              ? Align(
+                  alignment: Alignment.center,
+                  child: const Text(
+                    "사진 선택",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
                 )
               : Image.file(_image!, fit: BoxFit.cover),
         ),
@@ -106,14 +137,11 @@ class _ItemRegister extends State<ItemRegister> {
 
   // 상품 정보 텍스트 디자인
   Widget itemText(String iteminfo) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Text(
-        iteminfo,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+    return Text(
+      iteminfo,
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -122,12 +150,21 @@ class _ItemRegister extends State<ItemRegister> {
   Padding nameTextField() {
     return Padding(
       padding: EdgeInsets.all(10),
-      child: TextField(
+      child: TextFormField(
+        controller: nameController,
         style: TextStyle(
           fontSize: 12,
         ),
-        decoration: borderDecoration("상품명"),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "상품 이름은 비워둘 수 없습니다.";
+          }
+          return null;
+        },
+        autovalidateMode: AutovalidateMode.onUnfocus,
         cursorColor: Color(0xFF95C5D4),
+        //cursorHeight: 20,
+        decoration: borderDecoration("상품 이름을 입력해주세요."),
       ),
     );
   }
@@ -136,11 +173,23 @@ class _ItemRegister extends State<ItemRegister> {
   Widget priceTextField() {
     return Padding(
       padding: EdgeInsets.all(10),
-      child: TextField(
+      child: TextFormField(
+        controller: priceController,
         style: TextStyle(fontSize: 12),
-        keyboardType: TextInputType.number,
-        decoration: borderDecoration("숫자만 입력해주세요.(단위 : 원)"),
         cursorColor: Color(0xFF95C5D4),
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "상품 가격은 비워둘 수 없습니다.";
+          }
+          if (value.startsWith("0")) {
+            return "상픔 가격은 0으로 시작할 수 없습니다.";
+          }
+          return null;
+        },
+        autovalidateMode: AutovalidateMode.onUnfocus,
+        decoration: borderDecoration("상품 가격을 입력해주세요.(단위:원)"),
       ),
     );
   }
@@ -148,15 +197,16 @@ class _ItemRegister extends State<ItemRegister> {
   // 상품 설명 텍스트 필드
   Widget descriptionTextField() {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.fromLTRB(17, 10, 17, 10),
       child: SizedBox(
         height: 150,
-        child: TextField(
+        child: TextFormField(
+          controller: descriptionController,
           style: TextStyle(fontSize: 12),
           minLines: 10,
           maxLines: null,
           textAlignVertical: TextAlignVertical.top,
-          decoration: borderDecoration("상품 설명을 입력하세요."),
+          decoration: borderDecoration("상품 설명을 입력해주세요."),
           cursorColor: Color(0xFF95C5D4),
         ),
       ),
@@ -165,8 +215,8 @@ class _ItemRegister extends State<ItemRegister> {
 
   // 보더 속성
   InputDecoration borderDecoration(String guideText) {
-    return const InputDecoration(
-      hintText: "",
+    return InputDecoration(
+      hintText: guideText,
       border: OutlineInputBorder(),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Color(0xFF95C5D4)),
@@ -180,37 +230,51 @@ class _ItemRegister extends State<ItemRegister> {
     );
   }
 
+  bool isPossibleRegister() {
+    return (nameController.text.isNotEmpty &&
+        priceController.text.isNotEmpty &&
+        descriptionController.text.isNotEmpty &&
+        _image != null);
+  }
+
   // 등록하기 버튼
   Widget registerBotton() {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SizedBox(
-          width: double.infinity,
-          height: 56,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF95c5d4),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                )),
-            child: const Text(
-              "등록하기",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            width: double.infinity,
+            height: 56,
+            child: IgnorePointer(
+              ignoring: !isPossibleRegister(),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: isPossibleRegister()
+                        ? const Color(0xFF95c5d4)
+                        : Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    )),
+                child: const Text(
+                  "등록하기",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(
+                      context,
+                      Item(
+                          id: "",
+                          name: nameController.text,
+                          price: int.parse(priceController.text),
+                          description: descriptionController.text,
+                          imagePath: _image!.path));
+                },
               ),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            // ? () {
-            //     Navigator.pop(context, Image, name, price, ItemRegister);
-            //   }
-            // : null,
-          ),
-        ),
+            )),
       ),
     );
   }
