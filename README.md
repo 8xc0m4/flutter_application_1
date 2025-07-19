@@ -1,4 +1,4 @@
-# Team Projact - ShoppingMall
+# Team Project - ShoppingMall
 
 ### 상품 목록 페이지 (item_list.dart)
 
@@ -35,7 +35,7 @@
 
 ---
 
-# Divice:
+# Device:
 
 iphone 16 pro max
 
