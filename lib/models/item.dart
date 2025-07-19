@@ -1,5 +1,4 @@
 // lib/models/item.dart
-import 'package:flutter/material.dart';
 
 class Item {
   final String id; // 상품 고유 ID
