@@ -269,7 +269,8 @@ class _ItemRegister extends State<ItemRegister> {
                       Item(
                           id: "",
                           name: nameController.text,
-                          price: int.parse(priceController.text),
+                          price: int.parse(priceController
+                              .text), // NumberFormat('#,###').format(priceController.text),를 쓰면 15,000원 이렇게 나와용!!
                           description: descriptionController.text,
                           imagePath: _image!.path));
                 },
@@ -279,3 +280,26 @@ class _ItemRegister extends State<ItemRegister> {
     );
   }
 }
+
+
+
+
+
+
+/// ---소린 : 아이템 넘길때 이거 참고하셔도 좋을 것 같아요!!! ---
+/// 
+// final itemProvider = Provider.of<ItemProvider>(context, listen: false);
+
+// void _submitForm() {
+//   final newItem = Item(
+//     id: const Uuid().v4(), // uuid로 고유 id 생성
+//     name: nameController.text,
+//     price: int.parse(priceController.text),
+//     imagePath: _imagePath,
+//     description: descriptionController.text,
+//   );
+
+//   itemProvider.addItem(newItem);
+
+//   Navigator.pop(context); // 등록 후 뒤로
+// }
