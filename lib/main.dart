@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         // darkTheme: darkTheme,
         debugShowCheckedModeBanner: false,
-        // home: const ItemRegister(),
-        home: ItemDetail(item: testItem));
+        home: const ItemRegister();
+        // home: ItemDetail(item: testItem)); // 소린 테스트용!
   }
 }
