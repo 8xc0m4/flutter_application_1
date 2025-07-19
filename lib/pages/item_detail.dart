@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/item.dart';
 
 class ItemDetail extends StatefulWidget {
   final Item item;
@@ -32,12 +33,13 @@ class _ItemDetailState extends State<ItemDetail> {
     final totalPrice = widget.item.price * _quantity; // 총 가격 계산
 
     return Scaffold(
+      backgroundColor: lightSkyBlue,
       appBar: AppBar(
         title: Text(
           '상품 상세',
           style: TextStyle(color: blue),
         ),
-        backgroundColor: lightSkyBlue,
+
         elevation: 0, // 평면으로 보이게 그림자 제거!
       ),
       body: Column(
@@ -109,13 +111,6 @@ class _ItemDetailState extends State<ItemDetail> {
                   decoration: BoxDecoration(
                     color: white,
                     borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                      ),
-                    ],
                   ),
                   child: Text(
                     widget.item.description,
@@ -129,6 +124,7 @@ class _ItemDetailState extends State<ItemDetail> {
               ],
             ),
           ),
+
           // === body 3: 수량 조절 및 총 가격, 구매 버튼 ===
           const Spacer(), // Spacer를 사용하여 아래 버튼을 화면 하단에 위치시킴
 
@@ -139,6 +135,7 @@ class _ItemDetailState extends State<ItemDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    // Row-1: 수량 선택 텍스트
                     Text(
                       '수량 선택',
                       style: TextStyle(
@@ -146,66 +143,81 @@ class _ItemDetailState extends State<ItemDetail> {
                         fontWeight: FontWeight.bold,
                         color: black3,
                       ),
-                      Row(
-                        children: [
-                          _buildQuantityButton(
-                            Icons.remove,
-                            () {
-                              setState(() {
-                                if (_quantity > 1) _quantity--;
-                              });
-                            },
-                            screenWidth,
+                    ),
+                    // Row-2: 수량 조절 버튼과 숫자 담는 내부 Row
+                    Row(
+                      children: [
+                        _buildQuantityButton(
+                          Icons.remove,
+                          () {
+                            setState(() {
+                              if (_quantity > 1) _quantity--;
+                            });
+                          },
+                          screenWidth,
+                        ),
+                        SizedBox(width: screenWidth * 0.04), // 화면 너비의 4% 간격
+                        Text(
+                          '$_quantity',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
+                            fontWeight: FontWeight.bold,
+                            color: black3,
                           ),
-                          SizedBox(width: screenWidth * 0.04), // 화면 너비의 4% 간격
-                          Text(
-                            '$_quantity',
-                            style: TextStyle(
-                              fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
-                              fontWeight: FontWeight.bold,
-                              color: black3,
-                            ),
-                            SizedBox(width: screenWidth * 0.04), // 화면 너비의 4% 간격
-                            _buildQuantityButton(
-                              Icons.add,
-                              () {
-                                setState(() {
-                                  _quantity++;
-                                });
-                              },
-                              screenWidth,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(width: screenWidth * 0.04), // 화면 너비의 4% 간격
+                        _buildQuantityButton(
+                          Icons.add,
+                          () {
+                            setState(() {
+                              _quantity++;
+                            });
+                          },
+                          screenWidth,
+                        ),
+                      ],
                     ),
                   ],
                 ),
                 SizedBox(
                   width: screenWidth * 0.3, // 화면 너비의 30% 사용
                 ),
+                // 총 가격 표시하는 Row
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '총 가격: ${totalPrice.toString()}원',
-                      style: TextStyle(
-                        fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
-                        fontWeight: FontWeight.bold,
-                        color: blue,
-                      ),
+                    // 총 가격 텍스트 (왼쪽 위)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '총 가격',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
+                            fontWeight: FontWeight.bold,
+                            color: black3,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      '$totalPrice원',
-                      style: TextStyle(
-                        fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
-                        fontWeight: FontWeight.bold,
-                        color: blue,
-                      ),
+                    // 총 가격 숫자 (오른쪽 아래)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${totalPrice.toString()}원',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.05, // 화면 너비의 5% 크기
+                            fontWeight: FontWeight.bold,
+                            color: blue,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.02), // 화면 높이의 2% 간격
+                // --- 구매 버튼 ---
                 SizedBox(
                   width: double.infinity,
                   height: screenHeight * 0.065, // 화면 높이의 65% 사용
@@ -215,7 +227,7 @@ class _ItemDetailState extends State<ItemDetail> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content:
-                              Text('${widget.item.name} ${_quantity}개 구매 완료!'),
+                              Text('${widget.item.name} $_quantity개 구매 완료!'),
                         ),
                       );
                     },
@@ -244,21 +256,22 @@ class _ItemDetailState extends State<ItemDetail> {
       ),
     );
   }
+}
 
+@override
 // 수량 조절 버튼 위젯 (MediaQuery 적용)
-  Widget _buildQuantityButton(
-      IconData icon, VoidCallback onPressed, double screenWidth) {
-    return Container(
-      width: screenWidth * 0.1, // 화면 너비의 10%
-      height: screenWidth * 0.1, // 화면 너비의 10%
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey),
-      ),
-      child: IconButton(
-        icon: Icon(icon, size: screenWidth * 0.05), // 아이콘 크기도 화면 너비에 비례
-        onPressed: onPressed,
-      ),
-    );
-  }
+Widget _buildQuantityButton(
+    IconData icon, VoidCallback onPressed, double screenWidth) {
+  return Container(
+    width: screenWidth * 0.1, // 화면 너비의 10%
+    height: screenWidth * 0.1, // 화면 너비의 10%
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      border: Border.all(color: Colors.grey),
+    ),
+    child: IconButton(
+      icon: Icon(icon, size: screenWidth * 0.05), // 아이콘 크기도 화면 너비에 비례
+      onPressed: onPressed,
+    ),
+  );
 }
