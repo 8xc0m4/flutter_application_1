@@ -294,10 +294,54 @@ class _ItemRegister extends State<ItemRegister> {
                   final itemProvider =
                       Provider.of<ItemProvider>(context, listen: false);
                   itemProvider.addItem(_submitForm());
-                  Navigator.pop(context);
+
+                  // 등록 완료 팝업
+                  showDialogPopup();
                 },
               ),
             )),
+      ),
+    );
+  }
+
+  // 등록 완료 팝업
+  Future<dynamic> showDialogPopup() {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        backgroundColor: Colors.white,
+        // 타이틀
+        title: const Row(
+          children: [
+            Text(
+              "등록 완료",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        // 내용
+        content: const Text(
+          "상품이 등록되었습니다.",
+          style: TextStyle(fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // 팝업 닫기
+              Navigator.of(context).pop(); // 등록 페이지 닫기
+            },
+            style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Color(0xFF95c5d4),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                )),
+            child: const Text("확인"),
+          )
+        ],
       ),
     );
   }
