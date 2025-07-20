@@ -1,3 +1,16 @@
+// item_list 페이지는 임시로 빈 페이지로 만듦
+import 'package:flutter/material.dart';
+
+class ItemList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Item List')),
+      body: Center(child: Text('여기가 item_list 페이지입니다')),
+    );
+  }
+}
+
 
 ///-- 소린: 아이템 상세 페이지로 넘길때 이렇게 부탁드려요!!! --
 // onTap: () {
