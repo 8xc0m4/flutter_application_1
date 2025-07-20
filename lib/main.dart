@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/cart_provider.dart';
 import 'package:flutter_application_1/pages/item_detail.dart';
 import 'package:flutter_application_1/pages/item_detail2.dart';
+import 'package:flutter_application_1/pages/item_detail2.dart';
 import 'package:flutter_application_1/pages/item_register.dart';
 import 'package:flutter_application_1/provider/item_provider.dart';
 import 'package:flutter_application_1/styles/theme.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final testItem = context.read<ItemProvider>().items[3]; //mock item 4
+    final testItem = context.read<ItemProvider>().items[3]; //mock item 2
 
     return MaterialApp(
         title: 'Shopping Mall',
